@@ -2,13 +2,29 @@ A port of mobility-fw2.0p3 for OMNeT++ 4.0 simulator
 ====================================================
 by Jerome Rousselot <jerome.rousselot@csem.ch> and Rudolf Hornig <rudi@omnetpp.org>
 
-All of "core" was ported, as well as "contrib" and "testSuite".
-In "networks", everything has been ported but some little bugs remain (patches are welcome).
-The networks/csma scenario has been ported and runs correctly. It can
-be used as a template to fix the other directories.
+This is an unofficial (not supported by its original authors) port of the 
+Mobility Framework 2.0p3 to OMNeT++ 4.0.
+
+Its latest version can be found at github.com:
+http://github.com/mobility-fw/mf-opp4/tree/master
+
+and some information is available at the wiki page:
+http://wiki.github.com/mobility-fw/mf-opp4
+
+Two branches are available: master and ext.
+
+master is a "pure" port of mf2.
+
+ext includes additional modules from other authors. Contributions and bug fixes are welcome.
+An example network was added in networks/ieee802154 to demonstrate the use of the
+high precision multiple access interference PHY SnrEvalRadioAccNoise3, the CSMA protocol
+as defined in IEEE 802.15.4 (csma.ned) and the WiseRoute routing layer (wiseroute.ned).
+
+Several modules in the ext branch have been partially financed by the European Commission 
+under the Framework 6 IST Project ”Wirelessly Accessible Sensor Populations" (WASP) 
+under contract IST-034963.
 
 To run examples in the "networks" folder. Use the "run" script in the example dirs
-
 Note that the "networks", folder does not contain any .cc files so it is not added to the makefiles.
 
 Changes
