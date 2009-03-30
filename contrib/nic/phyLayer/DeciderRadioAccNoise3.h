@@ -1,13 +1,13 @@
 /* -*- mode:c++ -*- *******************************************************
  * file:        DeciderRadioAccNoise3.h
  *
- * authors:     David Raguin / Marc Loebbers
- *              Amre El-Hoiydi, Jérôme Rousselot
+ * authors:     Jerome Rousselot, Amre El-Hoiydi
+ * 			    David Raguin / Marc Loebbers
  *
- * copyright:   (C) 2004 Telecommunication Networks Group (TKN) at
+ * copyright:   (C) 2007-2009 CSEM SA, Neuchatel, Switzerland
+ * 			    (C) 2004 Telecommunication Networks Group (TKN) at
  *              Technische Universitaet Berlin, Germany.
- *              (C) 2007 CSEM
- *
+  *
  *              This program is free software; you can redistribute it
  *              and/or modify it under the terms of the GNU General Public
  *              License as published by the Free Software Foundation; either
@@ -15,8 +15,12 @@
  *              version.
  *              For further information see file COPYING
  *              in the top level directory
+ *
+ * Funding: This work was partially ﬁnanced by the European Commission under the
+ * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"
+ * (WASP) under contract IST-034963.
  ***************************************************************************
- * part of:     framework implementation developed by tkn
+ * part of:    Modifications to the MF-2 framework by CSEM
  **************************************************************************/
 
 
@@ -33,17 +37,10 @@
 /**
  * @brief Decider for the Radio AccNoise3 Model
  *
- * TODO: update comment below.
- * Depending on the minimum of the snr included in the PhySDU this
- * module computes a bit error probability. The header (1 Mbit/s) is
- * always modulated with DBQPSK. The PDU is normally modulated either
- * with DBPSK (1 and 2 Mbit/s) or CCK (5.5 and 11 Mbit/s). CCK is not
- * easy to model, therefore it is modeled as DQPSK with a 16-QAM for
- * 5.5 Mbit/s and a 256-QAM for 11 Mbit/s.
  *
  *
  * @ingroup decider
- * @author Marc L�bbers, David Raguin, Amre El-Hoiydi, Jerome Rousselot
+ * @author Jerome Rousselot, Amre El-Hoiydi, Marc L�bbers, David Raguin
  */
 class DeciderRadioAccNoise3:public BasicLayer
 {
@@ -90,6 +87,31 @@ protected:
     /** @brief computes if packet is ok or has errors*/
   bool packetOk(double, int, double bitrate);
 
+  virtual double getBERFromSNR(double snr);
+
+  /** @brief modulation type */
+  const char * modulation;
+
+
+protected:
+    /** @brief should be set in the omnetpp.ini*/
+  double bitrate;
+
+	/** @brief Minimum bit error rate. If SNIR is high, computed ber could be
+		higher than maximum radio performance. This value is an upper bound to
+		the performance. */
+  double BER_LOWER_BOUND;
+
+  long nbFramesWithInterference;
+  long nbFramesWithoutInterference;
+
+  long nbFramesWithInterferenceDropped;
+  long nbFramesWithoutInterferenceDropped;
+
+  bool stats;
+
+
+
 #ifdef _WIN32
     /**
      * @brief Implementation of the error function
@@ -102,15 +124,6 @@ protected:
      */
   double erfc(double);
 #endif
-
-protected:
-    /** @brief should be set in the omnetpp.ini*/
-  double bitrate;
-
-	/** @brief Minimum bit error rate. If SNIR is high, computed ber could be
-		higher than maximum radio performance. This value is an upper bound to
-		the performance. */
-  double BER_LOWER_BOUND;
 
 
 };

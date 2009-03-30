@@ -1,7 +1,7 @@
 /* -*- mode:c++ -*- ********************************************************
  * file:        SimTracer.h
  *
- * author:      Jérôme Rousselot
+ * author:      Jerome Rousselot
  *
  * copyright:   (C) 2007-2008 CSEM SA, Neuchatel, Switzerland
  *
@@ -12,9 +12,13 @@
  *              version.
  *              For further information see file COPYING
  *              in the top level directory
+ *
+ * Funding: This work was partially financed by the European Commission under the
+ * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"
+ * (WASP) under contract IST-034963.
  ***************************************************************************
- * part of:     Modifications to the MF Framework by CSEM
- ***************************************************************************/
+ * part of:    Modifications to the MF-2 framework by CSEM
+ **************************************************************************/
 
 #ifndef SIMTRACER_H
 #define SIMTRACER_H
@@ -27,6 +31,7 @@
 #include <BasicModule.h>
 #include <BasicLayer.h>
 #include <ChannelControl.h>
+#include "Packet.h"
 
 using namespace std;
 
@@ -52,17 +57,29 @@ public:
   void namLog(string namString);
 
   void radioEnergyLog(unsigned long mac, int state, simtime_t duration,
-		      double power);
+		      double power, double newPower);
 
   /** @brief Called by a routing protocol to log a link in a tree topology. */
   void logLink(int parent, int child);
   /** @brief Called by the MAC or NET layer to log the node position. */
   void logPosition(int node, double x, double y);
 
+  /** @brief Called by the Blackboard whenever a change occurs we're interested in */
+  virtual void receiveBBItem(int category, const BBItem * details, int scopeModuleId);
+
 protected:
    ofstream namFile, radioEnergyFile, treeFile;;
    vector < string > packetsColors;
+   cOutVector goodputVec;
    map < unsigned long, double >powerConsumptions;
+   int catPacket;
+   Packet packet;
+   long nbApplPacketsSent;
+   long nbApplPacketsReceived;
+   int catEnergy;
+   map < unsigned long, double >powerConsumptions2;
+   map < unsigned long, double >currPower;
+   map < unsigned long, simtime_t> lastUpdates;
 };
 
 

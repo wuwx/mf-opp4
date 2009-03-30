@@ -9,11 +9,22 @@
 *.exe
 *.o
 *.obj
-.tkenvrc
+scenarios/mban/mban
+scenarios/mbanfm/mbanfm
+scenarios/rso/rso
+scenarios/wiseroute/wiseroute
+out
 
 # ignore project specific files
 testSuite
 Makefile
 
+# ignore vizualisation cache directory
+.computed
+
+# ignore simulation results directory
+results
+
 # ignore machine specific configuration file
 en.sh
+.tkenvrc

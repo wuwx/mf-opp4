@@ -3,7 +3,7 @@
  *
  * author:      Jérôme Rousselot
  *
- * copyright:   (C) 2007-2008 CSEM SA, Neuchatel, Switzerland
+ * copyright:   (C) 2007-2009 CSEM SA, Neuchatel, Switzerland
  *
  *              This program is free software; you can redistribute it
  *              and/or modify it under the terms of the GNU General Public
@@ -12,9 +12,13 @@
  *              version.
  *              For further information see file COPYING
  *              in the top level directory
+ *
+ * Funding: This work was partially financed by the European Commission under the
+ * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"
+ * (WASP) under contract IST-034963.
  ***************************************************************************
- * part of:     Modifications to the MF Framework by CSEM
- ***************************************************************************/
+ * part of:    Modifications to the MF-2 framework by CSEM
+ **************************************************************************/
 
 
 #include "SimTracer.h"
@@ -32,7 +36,7 @@ void SimTracer::initialize(int stage)
 
 	char treeName[250];
 	int n;
-	n = sprintf(treeName, "results/tree-%d.txt", 
+	n = sprintf(treeName, "results/tree-%d.txt",
 	cSimulation::getActiveSimulation()->getEnvir()->getConfigEx()->getActiveRunNumber());
     treeFile.open(treeName);
     if (!treeFile) {
@@ -41,14 +45,10 @@ void SimTracer::initialize(int stage)
     } else {
       treeFile << "graph aRoutingTree " << endl << "{" << endl;
     }
-
-
-  } else if (stage == 1) {
-    // const char *channelModulePath = "sim.channelcontrol";
-    // cModule *modp = simulation.getModuleByPath(channelModulePath);
-    cModule *modp = this->getParentModule()->getSubmodule("channelcontrol");
-    ChannelControl *channelctrl = check_and_cast < ChannelControl * >(modp);
-    stringstream toLog;
+    goodputVec.setName("goodput");
+    catPacket = bb->subscribe(this, &packet, -1);
+    nbApplPacketsSent = 0;
+    nbApplPacketsReceived = 0;
 
   }
 }
@@ -60,18 +60,36 @@ void SimTracer::finish()
 {
   ofstream summaryPowerFile;
 
-  summaryPowerFile.open("summary_power_radio.csv");
-  map < unsigned long, double >::const_iterator iter =
+  map < unsigned long, double >::iterator iter =
     powerConsumptions.begin();
+
+  double sensorAvgP = 0;
+  int nbSensors = 0;
   for (; iter != powerConsumptions.end(); iter++) {
-    summaryPowerFile << iter->first << "\t" << iter->second << endl;
+	  iter->second = iter->second +  (simTime()-lastUpdates[iter->first]).dbl()*currPower[iter->first];
+	  iter->second = iter->second * 1000 / simTime();
+	  if(iter->first != 0) {
+		  nbSensors++;
+		  sensorAvgP += iter->second;
+	  }
   }
+  sensorAvgP = sensorAvgP / nbSensors;
   summaryPowerFile.close();
 
+  double goodput = 0;
+  if(nbApplPacketsSent > 0) {
+	  goodput = ((double) nbApplPacketsReceived)/nbApplPacketsSent;
+  } else {
+	  goodput = 0;
+  }
+  recordScalar("Application Packet Success Rate", goodput);
+  recordScalar("Application packets received", nbApplPacketsReceived);
+  recordScalar("Application packets sent", nbApplPacketsSent);
+  recordScalar("Sink power consumption", powerConsumptions[0]);
+  recordScalar("Sensor average power consumption", sensorAvgP);
   if (treeFile) {
     treeFile << "}" << endl;
     treeFile.close();
-
   }
 
 }
@@ -86,7 +104,7 @@ void SimTracer::namLog(string namString)
 }
 
 void SimTracer::radioEnergyLog(unsigned long mac, int state,
-			       simtime_t duration, double power)
+			       simtime_t duration, double power, double newPower)
 {
   Enter_Method_Silent();
   /*
@@ -97,6 +115,8 @@ void SimTracer::radioEnergyLog(unsigned long mac, int state,
     powerConsumptions[mac] = 0;
   }
   powerConsumptions[mac] = powerConsumptions[mac] + power * duration.dbl();
+  currPower[mac] = newPower;
+  lastUpdates[mac] = simTime();
 }
 
 
@@ -110,3 +130,19 @@ void SimTracer::logPosition(int node, double x, double y)
 {
 	treeFile << node << "[pos=\""<< x << ", " << y << "!\"];" << endl;
 }
+
+void SimTracer::receiveBBItem(int category, const BBItem * details,
+	       int scopeModuleId) {
+	if (category == catPacket) {
+		packet = *(static_cast<const Packet*>(details));
+	//	nbApplPacketsSent = nbApplPacketsSent + packet.getNbPacketsSent();
+	//	nbApplPacketsReceived = nbApplPacketsReceived + packet.getNbPacketsReceived();
+		if(packet.isSent()) {
+			nbApplPacketsSent = nbApplPacketsSent + 1;
+		} else {
+			nbApplPacketsReceived = nbApplPacketsReceived + 1;
+		}
+		goodputVec.record(((double) nbApplPacketsReceived)/nbApplPacketsSent);
+	}
+}
+

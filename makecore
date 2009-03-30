@@ -1,0 +1,8 @@
+#!/bin/sh
+
+# Use this instead of "make contrib" if you compile mobility framework under Mac OSX.
+
+make core
+cd out/gcc-debug/core/
+install_name_tool -id `pwd`/libmfcore.dylib libmfcore.dylib
+cd ../../../

@@ -2,10 +2,10 @@ package org.mf2.contrib.nic;
 //***************************************************************************
 // * file:        Nic802154_TI_CC2420.ned
 // *
-// * author:      Jérôme Rousselot, Marc Loebbers
+// * author:      Jerome Rousselot, Marc Loebbers
 // *
-// * copyright:   (C) 2008 CSEM SA, Neuchatel, Switzerland.
-// *		  (C) 2004 Telecommunication Networks Group (TKN) at
+// * copyright:   (C) 2008-2009 CSEM SA, Neuchatel, Switzerland.
+// *		  	  (C) 2004 Telecommunication Networks Group (TKN) at
 // *              Technische Universitaet Berlin, Germany.
 // *
 // *              This program is free software; you can redistribute it
@@ -15,8 +15,12 @@ package org.mf2.contrib.nic;
 // *              version.
 // *              For further information see file COPYING
 // *              in the top level directory
+// *
+// * Funding: This work was partially financed by the European Commission under the  
+// * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"  
+// * (WASP) under contract IST-034963.
 // ***************************************************************************
-// * part of:     framework implementation developed by tkn
+// * part of:    Modifications to the MF-2 framework by CSEM
 // **************************************************************************/
 
 import org.mf2.contrib.nic.radios.SingleChannelRadioAccNoise3;
@@ -26,25 +30,14 @@ import org.mf2.contrib.nic.macLayer.csma;
 
 
 //
-// This NIC implements a Texas Instruments CC 2420 802.15.4 network interface card.
+// This NIC implements a Texas Instruments CC 2420 802.15.4 network interface card
+// using the CSMA protocol as specified in IEEE 802.15.4-2006.
 // @author Jerome Rousselot
 //
 
 module Nic802154_TI_CC2420
 
 {
-    parameters:
-        bool tiDebug;
-        double MacQueueLength;
-        double MacMaxTxAttempts;
-        double MacMinBE;
-        double MacMaxBE;
-        double MacMaxCSMABackoffs;
-        double MacMaxFrameRetries;
-        //       MacDoStats : const;	
-        double emissionPower;
-
-
     gates:
         input uppergateIn; // from upper layers
         input radioIn; // to receive AirFrames
@@ -54,20 +47,17 @@ module Nic802154_TI_CC2420
     submodules:
         decider: DeciderRadioAccNoise3 {
             parameters:
-                debug = tiDebug;
-                berLowerBound = 1E-6; // lower bound on ber performance, between 0 and 1.
                 @display("p=106,157;i=block/process_s");
 
         }
         snrEval: SnrEvalRadioAccNoise3 {
             parameters:
-                debug = tiDebug;
                 publishRSSIAlways = false;
-                headerLength = 48; // ieee 802.15.4
-                transmitterPower = emissionPower;
-                carrierFrequency = 2.4E+9;
-                thermalNoise = -110;
-                sfdLength = 8;
+                headerLength = default (48 bit); // ieee 802.15.4
+                transmitterPower = default(1 mW);
+                carrierFrequency = default(2.4E+9 Hz);
+                thermalNoise = default(-110 dBm);
+                sfdLength = default(8 bit);
                 @display("p=96,236;i=block/wrxtx");
 
         }
@@ -91,26 +81,8 @@ module Nic802154_TI_CC2420
         }
         mac: csma {
             parameters:
-                debug = false;
-                headerLength = 72;
-                queueLength = MacQueueLength;
-                maxTxAttempts = MacMaxTxAttempts;
-                bitrate = 250000;
-                defaultChannel = 0;
-                busyRSSI = -97;
-                ccaDetectionTime = 0.000128; // 8 symbols
-                rxSetupTime = 0.001792;
-                aTurnaroundTime = 0.000192;    // 12 symbols
-                sifs = 0.000192;              // 12 symbols
-                macMinBE = MacMinBE;
-                macMaxBE = MacMaxBE;
-                macMaxCSMABackoffs = MacMaxCSMABackoffs;
-                aUnitBackoffPeriod = 0.00032;
-                macMaxFrameRetries = MacMaxFrameRetries;
-                macAckWaitDuration = 0.00056;  // 1+12+10+12 symbols
-                stats = true;
-                ackLength = 40;
-
+                rxSetupTime = 0.001792 s;
+				
                 @display("p=96,87;i=block/layer");
 
         }

@@ -2,11 +2,11 @@ package org.mf2.contrib.nic.phyLayer;
 //***************************************************************************
 // * file:        Decider802154.ned
 // *
-// * author:      Marc Loebbers, Amre El-Hoiydi, Jérôme Rousselot
+// * author:      Jerome Rousselot, Amre El-Hoiydi, Marc Loebbers 
 // *
 // * copyright:   (C) 2004 Telecommunication Networks Group (TKN) at
 // *              Technische Universitaet Berlin, Germany.
-// *              (C) 2007-2008 CSEM
+// *              (C) 2007-2009 CSEM, Neuchatel, Switzerland.
 // *
 // *              This program is free software; you can redistribute it
 // *              and/or modify it under the terms of the GNU General Public
@@ -15,8 +15,12 @@ package org.mf2.contrib.nic.phyLayer;
 // *              version.
 // *              For further information see file COPYING
 // *              in the top level directory
+// *
+// * Funding: This work was partially ﬁnanced by the European Commission under the  
+// * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"  
+// * (WASP) under contract IST-034963.
 // ***************************************************************************
-// * part of:     framework implementation developed by tkn
+// * part of:    Modifications to the MF-2 framework by CSEM
 // **************************************************************************/
 
 
@@ -27,7 +31,9 @@ simple DeciderRadioAccNoise3
 {
     parameters:
         bool debug = default(false); // debug switch
-        double berLowerBound; // minimum possible bit error rate (BER floor).
+        bool stats = default(true); // record some scalar statistics
+        double berLowerBound = default(1E-8); // minimum possible bit error rate (BER floor).
+	string modulation = default("msk"); // modulation type
     gates:
         output uppergateOut;
         output upperControlOut;

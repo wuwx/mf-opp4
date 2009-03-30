@@ -2,12 +2,11 @@ package org.mf2.contrib.nic.radios;
 //***************************************************************************
 // * file:        SingleChannelRadioAccNoise3.ned
 // *
-// * author:      Jérôme Rousselot, Amre El-Hoiydi, Andreas Koepke
+// * author:      Jerome Rousselot, Amre El-Hoiydi, Andreas Koepke
 // *
-// * copyright:   (C) 2007 CSEM
-// *		  (C) 2005 Telecommunication Networks Group (TKN) at
+// * copyright:   (C) 2007-2009 CSEM, Neuchatel, Switzerland.
+// *			  (C) 2004 Telecommunication Networks Group (TKN) at
 // *              Technische Universitaet Berlin, Germany.
-// *		  
 // *
 // *              This program is free software; you can redistribute it
 // *              and/or modify it under the terms of the GNU General Public
@@ -16,15 +15,19 @@ package org.mf2.contrib.nic.radios;
 // *              version.
 // *              For further information see file COPYING
 // *              in the top level directory
+// *
+// * Funding: This work was partially financed by the European Commission under the  
+// * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"  
+// * (WASP) under contract IST-034963.
 // ***************************************************************************
-// * part of:     framework implementation developed by tkn
+// * part of:    Modifications to the MF-2 framework by CSEM
 // **************************************************************************/
 
 simple SingleChannelRadioAccNoise3
 {
     parameters:
         bool debug = default(false); // debug switch
-
+		bool useSimTracer = default(false);
         double bitrate @unit(bps); // radio bit rate (in bits per second)
 
         // (1) time parameters (in seconds)

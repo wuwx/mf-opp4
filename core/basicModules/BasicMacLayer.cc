@@ -6,12 +6,12 @@
  * copyright:   (C) 2004 Telecommunication Networks Group (TKN) at
  *              Technische Universitaet Berlin, Germany.
  *
- *              This program is free software; you can redistribute it 
- *              and/or modify it under the terms of the GNU General Public 
+ *              This program is free software; you can redistribute it
+ *              and/or modify it under the terms of the GNU General Public
  *              License as published by the Free Software Foundation; either
- *              version 2 of the License, or (at your option) any later 
+ *              version 2 of the License, or (at your option) any later
  *              version.
- *              For further information see file COPYING 
+ *              For further information see file COPYING
  *              in the top level directory
  ***************************************************************************
  * part of:     framework implementation developed by tkn
@@ -40,15 +40,15 @@ void BasicMacLayer::initialize(int stage)
 	// The nic id is used as MAC address
         myMacAddr = getParentModule()->getId();
 
-        hasPar("coreDebug") ? coreDebug = par("coreDebug").boolValue() : 
+        hasPar("coreDebug") ? coreDebug = par("coreDebug").boolValue() :
 	    coreDebug = false;
     }
 }
 
 /**
- * Decapsulates the network packet from the received MacPkt 
+ * Decapsulates the network packet from the received MacPkt
  **/
-cMessage* BasicMacLayer::decapsMsg(MacPkt* msg) 
+cMessage* BasicMacLayer::decapsMsg(MacPkt* msg)
 {
     cPacket *m = msg->decapsulate();
     m->setControlInfo(new MacControlInfo(msg->getSrcAddr()));
@@ -64,7 +64,7 @@ cMessage* BasicMacLayer::decapsMsg(MacPkt* msg)
  * header fields.
  **/
 MacPkt* BasicMacLayer::encapsMsg(cPacket *msg)
-{  
+{
     MacPkt *pkt = new MacPkt(msg->getName(), msg->getKind());
     pkt->setBitLength(headerLength);
 
@@ -80,11 +80,11 @@ MacPkt* BasicMacLayer::encapsMsg(cPacket *msg)
 
     //set the src address to own mac address (nic module getId())
     pkt->setSrcAddr(myMacAddr);
-  
+
     //encapsulate the network packet
     pkt->encapsulate(msg);
     coreEV <<"pkt encapsulated\n";
-  
+
     return pkt;
 }
 
@@ -94,14 +94,14 @@ MacPkt* BasicMacLayer::encapsMsg(cPacket *msg)
  * (destAddr = nic module getId()) to the network layer
  *
  * @sa sendUp
- **/        
+ **/
 
 void BasicMacLayer::handleLowerMsg(cMessage *msg)
 {
     MacPkt *mac = static_cast<MacPkt *>(msg);
     int dest = mac->getDestAddr();
     int src = mac->getSrcAddr();
-    
+
     //only foward to upper layer if message is for me or broadcast
     if((dest == myMacAddr) || (dest == L2BROADCAST)) {
 	coreEV <<"msg from "<< src
@@ -109,7 +109,7 @@ void BasicMacLayer::handleLowerMsg(cMessage *msg)
 	sendUp(decapsMsg(mac));
     }
     else{
-	coreEV << "message with mac addr " << src 
+	coreEV << "message with mac addr " << src
 	       << " not for me (dest=" << dest
 	       << ") -> delete (my MAC="<<myMacAddr<<")\n";
 	delete mac;

@@ -1,0 +1,49 @@
+NOTE ON USING OMNET++ 4.0 AND MOBILITY FRAMEWORK ON MAC OS X
+------------------------------------------------------------
+Author: Damien Piguet <damien.piguet@csem.ch>
+Valid for (at least): OmNet++ 4.0, Mobility Framework 2.0 over Mac OS X 10.5
+
+------------------------------------------------------------
+
+When working under Mac OS X, everything compiles fine (Omnet++, mobility
+framework core, contrib as well as the scenario).
+
+However, starting a scenario run stops at the beginning and displays the
+following error message:
+
+dyld: Library not loaded: ../out/gcc-debug/contrib/libmfcontrib.dylib
+  Referenced from:
+/Users/dpi/prog/mygitrepo/scenarios/wiseroutecsma/./wiseroutecsma
+  Reason: image not found
+
+The reason of the problem is that under Mac OS X, dynamic libraries .dylib
+files have their regular filename and a so-called "install name" which comes in
+the form of a path. When compiled, Omnet++ libraries are created with the
+absolute path to the library file as install name.
+
+When it comes to mobility framework core and contrib (libmfcore.dylib,
+libmfcontrib.dylib), their install name is a relative path. This is fine for
+those two libraries to find each other, but the relative path in the install
+name is wrong for a scenario application (in scenarios/<name of scenario>/).
+
+Therefore to solve the problem, libmfcore and libmfcontrib must be compiled
+with the absolute paths as their install names. Unfortunatly, I haven't found a
+way to pass the relevant compiler option (-install_name) through the
+makemakefiles. I have posted a question about this issue to the Omnet++ MF
+forum.
+
+However, there is a workaround using the Mac OS X command line tool
+"install_name_tool" as a post-build step for MF core and contrib. I have
+created two scripts to ease the process: makecore and makecontrib, placed at
+the root. With the scripts, the correct build process for the mobility
+framework under Mac OS X becomes:
+
+make clean
+./mkmk
+./makecore
+./makecontrib
+cd scenarios/<name of scenario>
+make clean
+make
+
+Then it should work.

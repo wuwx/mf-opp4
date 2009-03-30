@@ -2,7 +2,7 @@ package org.mf2.contrib.utils;
 // **************************************************************************
 // * file:        SimTracer.ned
 // *
-// * author:      Jérôme Rousselot
+// * author:      Jerome Rousselot
 // *
 // * copyright:   (C) 2007 CSEM
 // *

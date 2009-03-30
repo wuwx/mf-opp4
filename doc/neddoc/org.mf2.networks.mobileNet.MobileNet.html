@@ -3,13 +3,13 @@
       <link rel="stylesheet" type="text/css" href="style.css" />
    </head>
    <body>
-<h2 class="comptitle">Compound Module <i>MobileNet</i></h2>
-<b>Package:</b> org.mf2.networks.mobileNet<br/><b>File: <a href="networks-mobileNet-MobileNet.ned.html">networks/mobileNet/MobileNet.ned</a></b><br/><p>(no description)</p><h3 class="subtitle">Known subclasses:</h3>
+<h2 class="comptitle">Network <i>mobileNet</i></h2>
+<b>Package:</b> org.mf2.networks.mobileNet<br/><b>File: <a href="networks-mobileNet-MobileNet.ned.html">networks/mobileNet/MobileNet.ned</a></b><br/><p>(no description)</p><h3 class="subtitle">Extends:</h3>
 <table>
 <tr>
    <td>
-      <a href="org.mf2.networks.mobileNet.mobileNet.html">mobileNet</a>
-      <i> (network)</i>
+      <a href="org.mf2.networks.mobileNet.MobileNet.html">MobileNet</a>
+      <i> (compound&nbsp;module)</i>
    </td>
    <td>
 <i>(no description)</i>
@@ -24,21 +24,21 @@
       <th>Default value</th>
       <th>Description</th>
    </tr>
-<tr class="local">
+<tr class="inherited">
    <td width="150">numHosts</td>
    <td width="100">
       <i>double</i>
    </td>
    <td width="120"></td>   <td></td>
 </tr>
-<tr class="local">
+<tr class="inherited">
    <td width="150">playgroundSizeX</td>
    <td width="100">
       <i>double</i>
    </td>
    <td width="120"></td>   <td></td>
 </tr>
-<tr class="local">
+<tr class="inherited">
    <td width="150">playgroundSizeY</td>
    <td width="100">
       <i>double</i>
@@ -56,6 +56,11 @@
 <tr>
    <td width="150">display</td>
    <td width="100"><i>bgb=$playgroundSizeX,$playgroundSizeY,white,,;bgp=10,10</i></td>
+   <td></td>
+</tr>
+<tr>
+   <td width="150">isNetwork</td>
+   <td width="100"><i></i></td>
    <td></td>
 </tr>
 </table>
@@ -179,26 +184,9 @@
 </tr>
 </table>
 <h3 class="subtitle">Source code:</h3>
-<pre class="src"><span style="color: #800000; font-weight: bold; ">module</span><span style="color: #000000; "> </span><span style="color: #000000; ">MobileNet</span><span style="color: #000000; ">
+<pre class="src"><span style="color: #800000; font-weight: bold; ">network</span><span style="color: #000000; "> </span><span style="color: #000000; ">mobileNet</span><span style="color: #000000; "> </span><span style="color: #800000; font-weight: bold; ">extends</span><span style="color: #000000; "> </span><span style="color: #000000; ">MobileNet</span><span style="color: #000000; ">
 {
     </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
-        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">numHosts</span><span style="color: #000000; ">;
-        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">playgroundSizeX</span><span style="color: #000000; ">;
-        </span><span style="color: #000080; font-weight: bold; ">double</span><span style="color: #000000; "> </span><span style="color: #000000; ">playgroundSizeY</span><span style="color: #000000; ">;
-        </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;bgb=$playgroundSizeX,$playgroundSizeY,white,,;bgp=10,10&quot;</span><span style="color: #000000; ">);
-    </span><span style="color: #800000; font-weight: bold; ">submodules</span><span style="color: #000000; ">:
-        </span><span style="color: #000000; ">channelcontrol</span><span style="color: #000000; ">: </span><span style="color: #000000; ">ChannelControl</span><span style="color: #000000; "> {
-            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
-                </span><span style="color: #000000; ">playgroundSizeX</span><span style="color: #000000; "> = </span><span style="color: #000000; ">playgroundSizeX</span><span style="color: #000000; ">;
-                </span><span style="color: #000000; ">playgroundSizeY</span><span style="color: #000000; "> = </span><span style="color: #000000; ">playgroundSizeY</span><span style="color: #000000; ">;
-                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;p=60,50;i=misc/sun&quot;</span><span style="color: #000000; ">);
-        }
-        </span><span style="color: #000000; ">host</span><span style="color: #000000; ">[</span><span style="color: #000000; ">numHosts</span><span style="color: #000000; ">]: </span><span style="color: #000000; ">PlainMobilityHost</span><span style="color: #000000; "> {
-            </span><span style="color: #800000; font-weight: bold; ">parameters</span><span style="color: #000000; ">:
-                </span><span style="color: #808080; font-style: italic; ">//display: &quot;i=device/pocketpc_s;r=,,#707070&quot;;
-</span><span style="color: #000000; ">                </span><span style="color: #000000; font-weight: bold; ">@display</span><span style="color: #000000; ">(</span><span style="color: #008000; ">&quot;i=device/pocketpc_s&quot;</span><span style="color: #000000; ">);
-
-        }
 }
 
 </span></pre>

@@ -1,11 +1,12 @@
 /* -*- mode:c++ -*- ********************************************************
  * file:        SingleChannelRadioAccNoise3.h
  *
- * author:      Andreas Koepke, Jérôme Rousselot, Amre El-Hoiyid
+ * author:      Jerome Rousselot, Amre El-Hoiydi, Andreas Koepke
  *
- * copyright:   (C) 2005 Telecommunication Networks Group (TKN) at
+* copyright:   (C) 2007-2009 CSEM SA, Neuchatel, Switzerland.
+ *				(C) 2005 Telecommunication Networks Group (TKN) at
  *              Technische Universitaet Berlin, Germany.
- * 				(C) 2007 CSEM
+
  *
  *              This program is free software; you can redistribute it
  *              and/or modify it under the terms of the GNU General Public
@@ -14,9 +15,13 @@
  *              version.
  *              For further information see file COPYING
  *              in the top level directory
+ *
+ * Funding: This work was partially financed by the European Commission under the
+ * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"
+ * (WASP) under contract IST-034963.
  ***************************************************************************
- * part of:     framework implementation developed by tkn
- ***************************************************************************/
+ * part of:    Modifications to the MF-2 framework by CSEM
+ **************************************************************************/
 
 #ifndef SINGLECHANNELRADIOACCNOISE3_H
 #define SINGLECHANNELRADIOACCNOISE3_H
@@ -31,7 +36,8 @@
 #include "Bitrate.h"
 #include "ConstsAccNoise3.h"
 #include "SimTracer.h"
-#include "BasicIPMacLayer.h"
+#include "BaseMacLayer.h"
+#include "Energy.h"
 
 /**
  * @brief A simple radio being able to send / transmit on one channel.
@@ -91,12 +97,17 @@ protected:
     /** @brief channel radio category */
   int stateCat;
 
+  bool useSimTracer;
+
     /**@brief Parameter enabling logging of energy consumption */
   bool doLogEnergy;
     /** @brief holds active channel, default channel is set by MAC protocol */
   ActiveChannel aChannel;
     /** @brief active channel category */
   int aChannelCat;
+
+  int energyCat;
+  Energy energy;
 
   /** @brief Keeps track of this radio power consumption. */
   double energyUsed;
@@ -133,7 +144,7 @@ protected:
 	is encountered while processing transient states. */
   void fsmError(RadioAccNoise3State::States);
 	/** @brief Generate trace data to monitor node energy consumption. */
-  void logEnergy();
+  void logEnergy(RadioAccNoise3State s);
     /**
      * perform switch if possible
      */

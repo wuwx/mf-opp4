@@ -4,8 +4,8 @@ package org.mf2.contrib.nic.macLayer;
 //*
 //* author:      Jerome Rousselot, Marc Loebbers
 //* 
-//* copyright:   (C) 2007 CSEM SA
-//*		 (C) 2004 Telecommunication Networks Group (TKN) at
+//* copyright:   (C) 2007-2009 CSEM SA, Neuchatel, Switzerland.
+//*		 		 (C) 2004 Telecommunication Networks Group (TKN) at
 //*              Technische Universitaet Berlin, Germany.
 //*
 //*              This program is free software; you can redistribute it
@@ -15,66 +15,61 @@ package org.mf2.contrib.nic.macLayer;
 //*              version.
 //*              For further information see file COPYING
 //*              in the top level directory
+//*
+//* Funding: This work was partially ﬁnanced by the European Commission under the  
+//* Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"  
+//* (WASP) under contract IST-034963.
 //***************************************************************************
-//* part of:     framework implementation developed by tkn
-//* description: MAC layer class for the CSMAMac
+//* part of:    Modifications to the MF-2 framework by CSEM
 //**************************************************************************/
 
 
 //
-// csma protocol
+// IEEE 802.15.4-2006 non-beacon enabled CSMA protocol
 //
-simple csma
+simple csma extends BaseMacLayer
 {
     parameters:
-
+		@class(csma);
         // debug switch
         bool debug = default(false);
-        bool stats;
-        bool trace;
+        bool stats = default(true);
+        bool trace = default(false);
         // level at which we consider medium busy (in dBm)
-        double busyRSSI;
+        double busyRSSI @unit(dBm) = default(-97 dBm);
 
         // simple interframe space. Time to wait between receiving a frame and acknowledging it.
         // Should be bigger than the maximum time for switching between Tx and Rx at the receiver.
-        double sifs;
-        // maximum number of transmission attempts
-        double maxTxAttempts;
+        double sifs @unit(s) = default(0.000192 s); // 12 symbols
         // length of MAC header
-        double headerLength;
+        double headerLength @unit(bit) = default(72 bit);
         // size of the MAC queue (maximum number of packets in Tx buffer)
-        double queueLength;
+        double queueLength = default(100);
         // default channel 
-        double defaultChannel;
+        double defaultChannel = default(0);
         // bit rate 
-        double bitrate;
+        double bitrate @unit(bps) = default(250000 bps);
         // complete MAC ack message length (in bits) 
         // (! headerLength is not added to this)
-        double ackLength;
+        double ackLength @unit(bit) = default(40 bit);
         // minimum backoff exponent
-        double macMinBE;
+        double macMinBE = default(3);
         // maximum backoff exponent
-        double macMaxBE;
+        double macMaxBE = default(8);
         // maximum backoffs
-        double macMaxCSMABackoffs;
+        double macMaxCSMABackoffs = default(5);
         // maximum number of frame retransmission
-        double macMaxFrameRetries;
+        double macMaxFrameRetries = default(3);
         // base unit for all backoff calculations
-        double aUnitBackoffPeriod;
+        double aUnitBackoffPeriod @unit(s) = default(0.00032 s);
         // time to wait for an acknowledgement after transmitting a unicast frame.
-        double macAckWaitDuration;
+        double macAckWaitDuration @unit(s) = default(0.00056 s);  // 1+12+10+12 symbols
         // Clear Channel Assessment detection time
-        double ccaDetectionTime;
+        double ccaDetectionTime @unit(s) = default(0.000128 s); // 8 symbols
         // Time to setup radio to reception state
-        double rxSetupTime;
+        double rxSetupTime @unit(s);
         // Time to switch radio from Rx to Tx state
-        double aTurnaroundTime;
-        // MAC address as hex string (12 hex digits), or
-        // "auto". "auto" values will be replaced by
-        // a generated MAC address in init stage 0.
-        string macaddress;
-        // IPv4 address *as a decimal integer !*    
-        double ipaddress;
+        double aTurnaroundTime @unit(s) = default(0.000192 s);    // 12 symbols
 
     gates:
         input uppergateIn;

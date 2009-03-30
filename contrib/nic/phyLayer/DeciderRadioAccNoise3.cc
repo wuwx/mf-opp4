@@ -1,12 +1,12 @@
-/***************************************************************************
+/* -*- mode:c++ -*- *******************************************************
  * file:        DeciderRadioAccNoise3.cc
  *
- * authors:     David Raguin / Marc Loebbers
- *              Amre El-Hoiydi, Jérôme Rousselot
+ * authors:     Jerome Rousselot, Amre El-Hoiydi
+ * 			    David Raguin / Marc Loebbers
  *
- * copyright:   (C) 2004 Telecommunication Networks Group (TKN) at
+ * copyright:   (C) 2007-2009 CSEM SA, Neuchatel, Switzerland
+ * 			    (C) 2004 Telecommunication Networks Group (TKN) at
  *              Technische Universitaet Berlin, Germany.
- *              (C) 2007 CSEM
  *
  *              This program is free software; you can redistribute it
  *              and/or modify it under the terms of the GNU General Public
@@ -15,9 +15,13 @@
  *              version.
  *              For further information see file COPYING
  *              in the top level directory
+ *
+ * Funding: This work was partially ﬁnanced by the European Commission under the
+ * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"
+ * (WASP) under contract IST-034963.
  ***************************************************************************
- * part of:     framework implementation developed by tkn
- ***************************************************************************/
+ * part of:    Modifications to the MF-2 framework by CSEM
+ **************************************************************************/
 
 
 #include "MacPkt_m.h"
@@ -37,6 +41,13 @@ void DeciderRadioAccNoise3::initialize(int stage)
 
   if (stage == 0) {
     BER_LOWER_BOUND = par("berLowerBound").doubleValue();
+    modulation = par("modulation").stringValue();
+    stats = par("stats");
+    nbFramesWithInterference = 0;
+    nbFramesWithoutInterference = 0;
+    nbFramesWithInterferenceDropped = 0;
+    nbFramesWithoutInterferenceDropped = 0;
+
   }
 }
 
@@ -49,7 +60,7 @@ void DeciderRadioAccNoise3::initialize(int stage)
  */
 void DeciderRadioAccNoise3::handleLowerMsg(cMessage * m)
 {
-  double rxDuration;
+  //double rxDuration;
   bool noErrors = true;
   simtime_t snrDuration;
   double snirMin, snirAvg;
@@ -62,8 +73,14 @@ void DeciderRadioAccNoise3::handleLowerMsg(cMessage * m)
     static_cast < SnrControlInfo * >(af->removeControlInfo());
 
   const SnrList & rList = cInfo->getSnrList();
-
   SnrList::const_iterator iter = rList.begin();
+
+  if(rList.size() > 1) {
+	  nbFramesWithInterference++;
+  } else {
+	  nbFramesWithoutInterference++;
+  }
+
   MacPkt *mac;
 
   snirMin = iter->snr;
@@ -100,10 +117,8 @@ void DeciderRadioAccNoise3::handleLowerMsg(cMessage * m)
       //  Pm = sum(n=1,n=M-1){(-1)^(n+1)choose(M-1,n) 1/(n+1) exp(-nkgamma/(n+1))}
       // Pb = 2^(k-1)/(2^k - 1) Pm
 
-      // non-coherent detection of binary signals in an AWGN Channel
-      // Digital Communications, John G. Proakis, section 4.3.1
-      // p.207, (4.3.19)
-      ber = std::max(0.5 * exp(-0.5 * iter->snr), BER_LOWER_BOUND);
+
+      ber = std::max(getBERFromSNR(iter->snr), BER_LOWER_BOUND);
       avgBER = ber*nbBits;
       snirAvg = snirAvg + iter->snr*snrDuration.dbl();
 
@@ -124,10 +139,8 @@ void DeciderRadioAccNoise3::handleLowerMsg(cMessage * m)
 
   avgBER = avgBER / af->getBitLength();
   snirAvg = snirAvg / af->getBitLength();
-  double rssi = (int) -log10(snirAvg);
+  double rssi = 10*log10(snirAvg);
   if (noErrors) {
-//    EV <<
-//      "packet was received correctly, it is now delivered to upper layer...\n";
     mac = static_cast < MacPkt * >(af->decapsulate());
     mac->
       setControlInfo(new
@@ -136,14 +149,32 @@ void DeciderRadioAccNoise3::handleLowerMsg(cMessage * m)
     sendUp(mac);
     af->removeControlInfo();
     delete af;
-
   } else {
-    //EV << "Packet has BIT ERRORS! It is lost!\n";
     af->setName("BIT_ERRORS");
     af->setKind(NicControlType::PACKET_DROPPED);
     sendControlUp(af);
+    if(rList.size() > 1) {
+      nbFramesWithInterferenceDropped++;
+    } else {
+      nbFramesWithoutInterferenceDropped++;
+    }
   }
   delete cInfo;
+}
+
+double DeciderRadioAccNoise3::getBERFromSNR(double snr) {
+	double ber = BER_LOWER_BOUND;
+
+	 if(strcmp(modulation, "msk")) {
+	      // non-coherent detection of binary signals in an AWGN Channel
+	      // Digital Communications, John G. Proakis, section 4.3.1
+	      // p.207, (4.3.19)
+		ber = 0.5 * exp(-0.5 * snr);
+	} else if (strcmp(modulation, "FMUWB") == 0) {
+		ber = 0.5 * exp(-0.5 * snr);
+	}
+
+	return ber;
 }
 
 cMessage *DeciderRadioAccNoise3::decapsMsg(AirFrameRadioAccNoise3 * frame)
@@ -160,4 +191,11 @@ cMessage *DeciderRadioAccNoise3::decapsMsg(AirFrameRadioAccNoise3 * frame)
 void DeciderRadioAccNoise3::finish()
 {
   BasicLayer::finish();
+  if(stats) {
+    recordScalar("nbFramesWithInterference", nbFramesWithInterference);
+    recordScalar("nbFramesWithoutInterference", nbFramesWithoutInterference);
+    recordScalar("nbFramesWithInterferenceDropped", nbFramesWithInterferenceDropped);
+    recordScalar("nbFramesWithoutInterferenceDropped", nbFramesWithoutInterferenceDropped);
+  }
 }
+

@@ -1,11 +1,12 @@
 /* -*- mode:c++ -*- ********************************************************
  * file:        csma.h
  *
- * author:      Jerome Rousselot, Amre El-Hoiydi,
- *		Marc Loebbers, Yosia Hadisusanto
+  * author:     Jerome Rousselot, Marcel Steine, Amre El-Hoiydi,
+ *				Marc Loebbers, Yosia Hadisusanto
  *
- * copyright:	(C) 2007-2008 CSEM SA
- *		(C) 2004 Telecommunication Networks Group (TKN) at
+ * copyright:	(C) 2007-2009 CSEM SA
+ * 				(C) 2009 T.U. Eindhoven
+ *				(C) 2004 Telecommunication Networks Group (TKN) at
  *              Technische Universitaet Berlin, Germany.
  *
  *              This program is free software; you can redistribute it
@@ -15,9 +16,13 @@
  *              version.
  *              For further information see file COPYING
  *              in the top level directory
+ *
+ * Funding: This work was partially financed by the European Commission under the
+ * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"
+ * (WASP) under contract IST-034963.
  ***************************************************************************
- * part of:     Modifications to the MF Framework by CSEM
- ***************************************************************************/
+ * part of:    Modifications to the MF-2 framework by CSEM
+ **************************************************************************/
 
 
 #ifndef csma_H
@@ -31,17 +36,14 @@
 #include <ActiveChannel.h>
 #include <RadioAccNoise3State.h>
 #include <RSSI.h>
+#include "BaseMacLayer.h"
 #include <Bitrate.h>
 #include <DroppedPacket.h>
-#include <BasicIPMacLayer.h>
 #include <BasicMobility.h>
 #include <Blackboard.h>
 #include <MacPkt_m.h>
 #include "MacControlInfo.h"
 #include <SingleChannelRadioAccNoise3.h>
-#include "MACAddress.h"
-#include "IPAddress.h"
-#include "SimTracer.h"
 #include "RadioAccNoise3PhyControlInfo.h"
 #include "ConstsAccNoise3.h"
 
@@ -50,7 +52,7 @@
  * @ingroup macLayer
  * @author Jerome Rousselot, Amre El-Hoiydi, Marc Loebbers, Yosia Hadisusanto, Andreas Koepke
  */
-class  csma : public BasicIPMacLayer
+class  csma : public BaseMacLayer
 {
   public:
 
@@ -78,11 +80,8 @@ class  csma : public BasicIPMacLayer
     /** @brief Called by the Blackboard whenever a change occurs we're interested in */
     virtual void receiveBBItem(int category, const BBItem *details, int scopeModuleId);
 
-
   protected:
     typedef std::list<MacPkt*> MacQueue;
-
-    SimTracer *tracer;
 
   long nbTxFrames;
   long nbRxFrames;
@@ -110,9 +109,6 @@ class  csma : public BasicIPMacLayer
         TRANSMITACK_7
 
     };
-
-    vector<string> macStatesColors;
-
 
     /*************************************************************/
     /****************** TYPES ************************************/
@@ -250,7 +246,6 @@ class  csma : public BasicIPMacLayer
     int ackLength;
 
 
-
 private:
 	// FSM functions
 	void fsmError(t_mac_event event, cMessage *msg);
@@ -270,8 +265,6 @@ private:
 	double scheduleBackoff();
 	cMessage *decapsMsg(MacPkt * macPkt);
 	MacPkt * ackMessage;
-	string namPrevColor;
-	stringstream toLog;
 
 	//sequence number for sending, map for the general case with more senders
 	//also in initialisation phase multiple potential parents

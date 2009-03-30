@@ -4,16 +4,19 @@
  * author:      Jerome Rousselot
  *
  * copyright:   (C) 2007 CSEM SA
- *              This program is free software; you can redistribute it 
- *              and/or modify it under the terms of the GNU General Public 
+ *              This program is free software; you can redistribute it
+ *              and/or modify it under the terms of the GNU General Public
  *              License as published by the Free Software Foundation; either
- *              version 2 of the License, or (at your option) any later 
+ *              version 2 of the License, or (at your option) any later
  *              version.
- *              For further information see file COPYING 
+ *              For further information see file COPYING
  *              in the top level directory
- **************************************************************************
- * part of:     framework implementation developed by tkn
- * description: - control info to pass physical information 
+ *
+ * Funding: This work was partially financed by the European Commission under the
+ * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"
+ * (WASP) under contract IST-034963.
+ ***************************************************************************
+ * part of:    Modifications to the MF-2 framework by CSEM
  **************************************************************************/
 
 #ifndef RADIOACCNOISE3_PHYCONTROLINFO_H
@@ -26,8 +29,8 @@
  *
  * The physical layer needs some additional information from the MAC,
  * like the bit rate to use, and passes up some information about the
- * signal strength. 
- * 
+ * signal strength.
+ *
  *
  * @author Jerome Rousselot
  **/
@@ -38,7 +41,7 @@ protected:
   long preambleLength;
   double errorRate;
   double rssi;
-  
+
 public:
     /** @brief Default constructor*/
  RadioAccNoise3PhyControlInfo(const double br = 0, const double s = 0, const long pl = 16, const double ber=1E-6, double rss=-10):PhyControlInfo(br, s),
@@ -60,12 +63,12 @@ public:
   {
     return errorRate;
   };
-  
+
   virtual const double getRSSI()
   {
       return rssi;
   };
-  
+
     /** @brief set preamble length in bits */
   virtual void getPreambleLength(const long pl)
   {
