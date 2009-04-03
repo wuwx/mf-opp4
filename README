@@ -21,7 +21,7 @@ high precision multiple access interference PHY SnrEvalRadioAccNoise3, the CSMA 
 as defined in IEEE 802.15.4 (csma.ned) and the WiseRoute routing layer (wiseroute.ned).
 
 Several modules in the ext branch have been partially financed by the European Commission 
-under the Framework 6 IST Project ”Wirelessly Accessible Sensor Populations" (WASP) 
+under the Framework 6 IST Project "Wirelessly Accessible Sensor Populations" (WASP) 
 under contract IST-034963.
 
 To run examples in the "networks" folder. Use the "run" script in the example dirs

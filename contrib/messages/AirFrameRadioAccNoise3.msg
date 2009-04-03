@@ -1,7 +1,7 @@
 //**************************************************************************
 // * file:        AirFrameRadioAccNoise3.msg
 // *
-// * author:      Jérôme Rousselot, Andreas Koepke
+// * author:      Jerome Rousselot, Andreas Koepke
 // *
 // * copyright:(C) 2007 CSEM SA   
 // * 				(C) 2006 Telecommunication Networks Group (TKN) at

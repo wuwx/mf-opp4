@@ -17,7 +17,7 @@
  *              in the top level directory
  *
  * Funding: This work was partially financed by the European Commission under the
- * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"
+ * Framework 6 IST Project "Wirelessly Accessible Sensor Populations"
  * (WASP) under contract IST-034963.
  ***************************************************************************
  * part of:    Modifications to the MF-2 framework by CSEM
@@ -48,7 +48,7 @@
  * transient states are used to model power consumption.
  *
  * @ingroup radios
- * @author Andreas Koepke, Jérôme Rousselot, Amre El-Hoiydi
+ * @author Andreas Koepke, Jerome Rousselot, Amre El-Hoiydi
  **/
 class SingleChannelRadioAccNoise3:public BasicModule
 {

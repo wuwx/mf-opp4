@@ -43,6 +43,6 @@ Port to Omnet++ 4.0
 ===================
 
 This is a port of the mobility framework to Omnet++ 4.0.
-Jérôme Rousselot <jerome.rousselot@csem.ch>.
+Jerome Rousselot <jerome.rousselot@csem.ch>.
 Rudolf Hornig <rudi@omnetpp.org> helped to fix the build system.
 

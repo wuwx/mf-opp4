@@ -1,7 +1,7 @@
 /***************************************************************************
  * file:        DijkstraRoutes.h
  *
- * author:      Jérôme Rousselot
+ * author:      Jerome Rousselot
  *
  * copyright:   (C) 2007 CSEM
  *
@@ -12,8 +12,12 @@
  *              version.
  *              For further information see file COPYING
  *              in the top level directory
+ *
+ * Funding: This work was partially financed by the European Commission under the
+ * Framework 6 IST Project "Wirelessly Accessible Sensor Populations"
+ * (WASP) under contract IST-034963.
  ***************************************************************************
- * part of:     framework implementation developed by tkn
+ * part of:    Modifications to the MF-2 framework by CSEM
  * description: Implementation of a precomputed routing layer
  **************************************************************************/
 
@@ -44,7 +48,7 @@ using namespace std;
  *
  *
  * @ingroup netwLayer
- * @author Jérôme Rousselot
+ * @author Jerome Rousselot
  **/
 
 class DijkstraRoutes

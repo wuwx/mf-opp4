@@ -14,7 +14,7 @@
  *              in the top level directory
  *
  * Funding: This work was partially financed by the European Commission under the
- * Framework 6 IST Project ”Wirelessly Accessible Sensor Populations"
+ * Framework 6 IST Project "Wirelessly Accessible Sensor Populations"
  * (WASP) under contract IST-034963.
  ***************************************************************************
  * part of:    Modifications to the MF-2 framework by CSEM
@@ -38,7 +38,7 @@ using namespace std;
 /**
  * @class SimTracer
  * @ingroup utils
- * @author Jérôme Rousselot
+ * @author Jerome Rousselot
  */
 
 class SimTracer:public BasicModule

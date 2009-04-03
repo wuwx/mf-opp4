@@ -1,7 +1,7 @@
 /* -*- mode:c++ -*- ********************************************************
  * file:        Packet.h
  *
- * author:      Jérôme Rousselot
+ * author:      Jerome Rousselot
  *
  * copyright:   (C) 2009 CSEM SA
  *

@@ -1,9 +1,9 @@
 /***************************************************************************
  * file:        pairwise.h
  *
- * author:      Jérôme Rousselot
+ * author:      Jerome Rousselot
  *
- * copyright:   (C) 2007-2008 CSEM SA, Neuchâtel, Switzerland.
+ * copyright:   (C) 2007-2008 CSEM SA, Neuchatel, Switzerland.
  *
  * description: Implementation of the pairwise routing protocol
  *		Ref: "A Robust, Responsive, Distributed Tree-Based Routing
@@ -11,8 +11,20 @@
  *		Ad-Hoc Networks", Tunc Ikikardes, Markus Hofbauer,
  *		August Kaelin, Martin May, Proceedings of IEEE
  *		Symposium on Computers and Communications, IEEE, July, 2007.
- **************************************************************************
- * part of:     Modifications to the MF Framework by CSEM
+ *
+ *              This program is free software; you can redistribute it
+ *              and/or modify it under the terms of the GNU General Public
+ *              License as published by the Free Software Foundation; either
+ *              version 2 of the License, or (at your option) any later
+ *              version.
+ *              For further information see file COPYING
+ *              in the top level directory
+ *
+ * Funding: This work was partially financed by the European Commission under the
+ * Framework 6 IST Project "Wirelessly Accessible Sensor Populations"
+ * (WASP) under contract IST-034963.
+ ***************************************************************************
+ * part of:    Modifications to the MF-2 framework by CSEM
  **************************************************************************/
 
 #ifndef pairwise_H
@@ -44,7 +56,7 @@ using namespace std;
  * as root node.
  *
  * @ingroup netwLayer
- * @author Jérôme Rousselot
+ * @author Jerome Rousselot
  **/
 class pairwise : public BasicLayer
 {
