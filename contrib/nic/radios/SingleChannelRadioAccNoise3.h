@@ -91,6 +91,10 @@ public:
 
   ~SingleChannelRadioAccNoise3();
 
+  virtual bool switchToSleep();
+  virtual bool switchToSend();
+  virtual bool switchToRecv();
+
 protected:
     /** @brief hold radio state */
    RadioAccNoise3State detailedState;

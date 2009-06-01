@@ -292,3 +292,18 @@ void SingleChannelRadioAccNoise3::finish() {
 SingleChannelRadioAccNoise3::~SingleChannelRadioAccNoise3() {
 	cancelAndDelete(timer);
 }
+
+bool SingleChannelRadioAccNoise3::switchToSleep() {
+	execute(ENTER_SLEEP);
+	return true;
+}
+
+bool SingleChannelRadioAccNoise3::switchToSend() {
+	execute(ENTER_TX);
+	return true;
+}
+
+bool SingleChannelRadioAccNoise3::switchToRecv() {
+	execute(ENTER_RX);
+	return true;
+}
