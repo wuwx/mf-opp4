@@ -27,7 +27,7 @@
 #define SINGLECHANNELRADIOACCNOISE3_H
 
 #include <omnetpp.h>
-#include <SingleChannelRadioAccNoise3.h>
+#include <SingleChannelRadio.h>
 #include <ModuleAccess.h>
 #include <ActiveChannel.h>
 #include <map>
@@ -50,7 +50,7 @@
  * @ingroup radios
  * @author Andreas Koepke, Jerome Rousselot, Amre El-Hoiydi
  **/
-class SingleChannelRadioAccNoise3:public BasicModule
+class SingleChannelRadioAccNoise3:public SingleChannelRadio
 {
 
 

@@ -29,7 +29,7 @@ Define_Module(SingleChannelRadioAccNoise3)
 ;
 
 void SingleChannelRadioAccNoise3::initialize(int stage) {
-	BasicModule::initialize(stage);
+	SingleChannelRadio::initialize(stage);
 	if (stage == 0) {
 
 		detailedState = RadioAccNoise3State(RadioAccNoise3State::SLEEP);
@@ -282,7 +282,7 @@ bool SingleChannelRadioAccNoise3::setBitrate(double b) {
 }
 
 void SingleChannelRadioAccNoise3::finish() {
-	BasicModule::finish();
+	SingleChannelRadio::finish();
 	if (doLogEnergy)
 		logEnergy(RadioAccNoise3State::SLEEP);
 	recordScalar("energyUsed", energyUsed);
