@@ -77,7 +77,7 @@ void SingleChannelRadioAccNoise3::initialize(int stage) {
 		energyCat = bb->getCategory(&energy);
 
 		// define state
-		stateCat = bb->getCategory(&detailedState);
+		detailedStateCat = bb->getCategory(&detailedState);
 		// but don't try to log energy during initialization
 		doLogEnergy = false;
 		detailedState.setState(RadioAccNoise3State::SLEEP, simTime());
@@ -185,24 +185,31 @@ void SingleChannelRadioAccNoise3::enterState(RadioAccNoise3State::States newStat
 	switch (newState) {
 	// Steady states
 	case RadioAccNoise3State::SLEEP:
+		state.setState(RadioState::SLEEP);
 	case RadioAccNoise3State::TX:
+		state.setState(RadioState::SEND);
 	case RadioAccNoise3State::RX:
+		state.setState(RadioState::RECV);
 		break;
 		// Transient states
 	case RadioAccNoise3State::SETUP_RX:
 		timer->setKind(RadioAccNoise3State::RX);
+		state.setState(RadioState::SWITCH_TO_RECV);
 		startTimer(delay_setup_rx);
 		break;
 	case RadioAccNoise3State::SETUP_TX:
 		timer->setKind(RadioAccNoise3State::TX);
+		state.setState(RadioState::SWITCH_TO_SEND);
 		startTimer(delay_setup_tx);
 		break;
 	case RadioAccNoise3State::SWITCH_RX_TX:
 		timer->setKind(RadioAccNoise3State::TX);
+		state.setState(RadioState::SWITCH_TO_SEND);
 		startTimer(delay_switch_rx_tx);
 		break;
 	case RadioAccNoise3State::SWITCH_TX_RX:
 		timer->setKind(RadioAccNoise3State::RX);
+		state.setState(RadioState::SWITCH_TO_RECV);
 		startTimer(delay_switch_tx_rx);
 		break;
 	default:
@@ -213,7 +220,8 @@ void SingleChannelRadioAccNoise3::enterState(RadioAccNoise3State::States newStat
 		logEnergy(newState);
 	}
 	detailedState.setState(newState, simTime());
-	bb->publishBBItem(stateCat, &detailedState, nicModuleId);
+	bb->publishBBItem(detailedStateCat, &detailedState, nicModuleId);
+	bb->publishBBItem(stateCat, &state, nicModuleId);
 }
 
 void SingleChannelRadioAccNoise3::logEnergy(RadioAccNoise3State newState) {

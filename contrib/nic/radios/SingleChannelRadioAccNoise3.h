@@ -100,7 +100,7 @@ protected:
    RadioAccNoise3State detailedState;
 
     /** @brief channel radio category */
-  int stateCat;
+  int detailedStateCat;
 
   bool useSimTracer;
 
