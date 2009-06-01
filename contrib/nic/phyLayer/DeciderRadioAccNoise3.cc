@@ -165,7 +165,7 @@ void DeciderRadioAccNoise3::handleLowerMsg(cMessage * m)
 double DeciderRadioAccNoise3::getBERFromSNR(double snr) {
 	double ber = BER_LOWER_BOUND;
 
-	 if(strcmp(modulation, "msk")) {
+	 if(strcmp(modulation, "msk") == 0) {
 	      // non-coherent detection of binary signals in an AWGN Channel
 	      // Digital Communications, John G. Proakis, section 4.3.1
 	      // p.207, (4.3.19)
