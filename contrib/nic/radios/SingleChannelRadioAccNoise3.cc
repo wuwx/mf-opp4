@@ -32,7 +32,11 @@ void SingleChannelRadioAccNoise3::initialize(int stage) {
 	SingleChannelRadio::initialize(stage);
 	if (stage == 0) {
 
-		detailedState = RadioAccNoise3State(RadioAccNoise3State::SLEEP);
+		if(par("compatibilityMode")) {
+		  detailedState = RadioAccNoise3State(RadioAccNoise3State::RX);
+		} else {
+			detailedState = RadioAccNoise3State(RadioAccNoise3State::SLEEP);
+		}
 		aChannel = ActiveChannel(0);
 		energyUsed = 0;
 		useSimTracer = par("useSimTracer");
