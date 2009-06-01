@@ -63,36 +63,36 @@ class SingleChannelRadio : public BasicModule
 
     cMessage *timer;
     /** @} */
-    
+
     /** semaphore to prevent changing of radio during a change */
     bool handlingTimer;
 
     /** id of the surrounding nic module */
     int nicModuleId;
-    
+
 protected:
     /**
      * perform switch if possible
      */
     bool switchTo(RadioState::States, simtime_t delta);
-    
+
 public:
     /** @brief Initialization of the module and some variables*/
     virtual void initialize(int);
     virtual void finish();
-    
+
     /** @brief should not be called,
      *  instead direct calls to the radio methods should be used.
      */
     virtual void handleMessage( cMessage* );
-    
+
     /**
      * Methods to control state of this radio
      * returns whether state was actually changed
      */
-    bool switchToSleep();
-    bool switchToSend();
-    bool switchToRecv();
+    virtual bool switchToSleep();
+    virtual bool switchToSend();
+    virtual bool switchToRecv();
 
     /** @brief change the active channel, never fails (returns true). */
     bool setActiveChannel(int c);
