@@ -30,6 +30,7 @@ simple SnrEvalRadioAccNoise3
         bool debug = default(false); // debug switch
         bool trace = default(false); // vector log switch
         bool stats = default(true); // scalar statistics switch
+        bool compatibiltyMode = default(false); // if active, the radio will be in reception at initialization time. This allows to run MAC protocols depending on this behavior inherited from the original radio model.
         double alpha = default(2.5);
         double headerLength @unit(bit); // Total length of PHY header (usually sync+sfd) 
         double transmitterPower @unit(mW) = default(1 mW);  // Radiated power at antenna.

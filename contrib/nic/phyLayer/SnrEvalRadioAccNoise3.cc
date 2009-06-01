@@ -87,7 +87,7 @@ void SnrEvalRadioAccNoise3::initialize(int stage) {
 		radioState = RadioAccNoise3State::SLEEP;
 		rssi.setRSSI(thermalNoise);
 
-		//indication.setState(MediumIndication::IDLE);
+		indication.setState(MediumIndication::IDLE);
 
 		// subscribe for information about the radio
 
@@ -97,7 +97,9 @@ void SnrEvalRadioAccNoise3::initialize(int stage) {
 		catRadioState = bb->subscribe(this, &cs, getParentModule()->getId());
 		catRSSI = bb->getCategory(&rssi);
 		catBitrate = bb->subscribe(this, &br, getParentModule()->getId());
-		//catIndication = bb->getCategory(&indication);
+		catIndication = bb->getCategory(&indication);
+
+
 	} else if (stage == 1) {
 		if (alpha < cc->par("alpha").doubleValue())
 			error(
@@ -132,6 +134,12 @@ void SnrEvalRadioAccNoise3::initialize(int stage) {
 		state = MONITOR;
 		// we can publish since we are in stage 1
 		bb->publishBBItem(catRSSI, &rssi, nicModuleId);
+
+		if(par("compatibilityMode")) {
+			bb->publishBBItem(catIndication, &indication, nicModuleId);
+		}
+
+
 		if (trace) {
 		  noiseLevels.record(noiseLevel);
   		  rssiValues.record(rssi.getRSSI());
@@ -220,10 +228,14 @@ void SnrEvalRadioAccNoise3::execute(Events event,
 
 				// add initial snr value
 				addNewSnr();
-				//rssi.setRSSI(rssi.getRSSI() + recvBuff[frame]); // why this line ? See line 192 just above...
+
 				indication.setState(MediumIndication::BUSY);
-				if (publishRSSIAlways || radioState == RadioAccNoise3State::RX)
+				if(radioState == RadioAccNoise3State::RX) {
+					bb->publishBBItem(catIndication, &indication, nicModuleId);
+				}
+				if (publishRSSIAlways || radioState == RadioAccNoise3State::RX) {
 					bb->publishBBItem(catRSSI, &rssi, nicModuleId);
+				}
 				enterState(DECODING); // transition 7
 			} else {
 				//	    EV << "SYNC failed ! Frame will be treated as additive noise." <<
@@ -275,6 +287,10 @@ void SnrEvalRadioAccNoise3::execute(Events event,
 				rssi.setRSSI(noiseLevel);
 				if (trace) {
 				  rssiValues.record(rssi.getRSSI());
+				}
+				indication.setState(MediumIndication::IDLE);
+				if(radioState == RadioAccNoise3State::RX) {
+					bb->publishBBItem(catIndication, &indication, nicModuleId);
 				}
 				if (publishRSSIAlways || radioState == RadioAccNoise3State::RX)
 					bb->publishBBItem(catRSSI, &rssi, nicModuleId);

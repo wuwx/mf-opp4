@@ -35,6 +35,7 @@
 #include "RSSI.h"
 #include <ChannelControl.h>
 #include "RadioAccNoise3State.h"
+#include "MediumIndication.h"
 
 #include <cassert>
 
