@@ -32,7 +32,7 @@ void SingleChannelRadioAccNoise3::initialize(int stage) {
 	BasicModule::initialize(stage);
 	if (stage == 0) {
 
-		state = RadioAccNoise3State(RadioAccNoise3State::SLEEP);
+		detailedState = RadioAccNoise3State(RadioAccNoise3State::SLEEP);
 		aChannel = ActiveChannel(0);
 		energyUsed = 0;
 		useSimTracer = par("useSimTracer");
@@ -77,10 +77,10 @@ void SingleChannelRadioAccNoise3::initialize(int stage) {
 		energyCat = bb->getCategory(&energy);
 
 		// define state
-		stateCat = bb->getCategory(&state);
+		stateCat = bb->getCategory(&detailedState);
 		// but don't try to log energy during initialization
 		doLogEnergy = false;
-		state.setState(RadioAccNoise3State::SLEEP, simTime());
+		detailedState.setState(RadioAccNoise3State::SLEEP, simTime());
 		// configure doLogEnergy correctly
 		doLogEnergy = hasPar("logEnergy") ? par("logEnergy").boolValue() : true;
 
@@ -128,7 +128,7 @@ void SingleChannelRadioAccNoise3::execute(commands command) {
 		startTimer(0);
 		break;
 	case ENTER_TX:
-		switch (state.getState()) {
+		switch (detailedState.getState()) {
 		case RadioAccNoise3State::SLEEP: // transition 1
 		case RadioAccNoise3State::SETUP_TX: // transition 10
 		case RadioAccNoise3State::SETUP_RX: // transition 12
@@ -148,7 +148,7 @@ void SingleChannelRadioAccNoise3::execute(commands command) {
 		}
 		break;
 	case ENTER_RX:
-		switch (state.getState()) {
+		switch (detailedState.getState()) {
 		case RadioAccNoise3State::SLEEP: // transition 5
 		case RadioAccNoise3State::SETUP_TX: // transition 11
 		case RadioAccNoise3State::SETUP_RX: // transition 9
@@ -175,7 +175,7 @@ void SingleChannelRadioAccNoise3::execute(commands command) {
 void SingleChannelRadioAccNoise3::fsmError(commands command) {
 	stringstream errMsg;
 
-	errMsg << "Error! Radio FSM (current state is " << state.getState();
+	errMsg << "Error! Radio FSM (current state is " << detailedState.getState();
 	errMsg << ") received an unknown command: " << command << ".";
 	error(errMsg.str().data());
 }
@@ -212,8 +212,8 @@ void SingleChannelRadioAccNoise3::enterState(RadioAccNoise3State::States newStat
 	if (doLogEnergy) {
 		logEnergy(newState);
 	}
-	state.setState(newState, simTime());
-	bb->publishBBItem(stateCat, &state, nicModuleId);
+	detailedState.setState(newState, simTime());
+	bb->publishBBItem(stateCat, &detailedState, nicModuleId);
 }
 
 void SingleChannelRadioAccNoise3::logEnergy(RadioAccNoise3State newState) {
@@ -224,11 +224,11 @@ void SingleChannelRadioAccNoise3::logEnergy(RadioAccNoise3State newState) {
 	//    << ", powerconsumption=" << powerConsumptions[state.
 	//						  getState()] << "." << endl;
 	if (useSimTracer)
-		tracer->radioEnergyLog(macaddress, state.getState(), simTime()
-				- state.getEntranceTime(), powerConsumptions[state.getState()],
+		tracer->radioEnergyLog(macaddress, detailedState.getState(), simTime()
+				- detailedState.getEntranceTime(), powerConsumptions[detailedState.getState()],
 				powerConsumptions[newState.getState()]);
-	energyUsed = energyUsed + (simTime() - state.getEntranceTime()).dbl()
-			* powerConsumptions[state.getState()];
+	energyUsed = energyUsed + (simTime() - detailedState.getEntranceTime()).dbl()
+			* powerConsumptions[detailedState.getState()];
 	//energy.setEnergyUsed(energyUsed);
 	//energy.setCurrentP(powerConsumptions[newState.getState()]);
 	// bb->publishBBItem(energyCat, &energy, macaddress);
@@ -244,7 +244,7 @@ void SingleChannelRadioAccNoise3::startTimer(simtime_t delay) {
 void SingleChannelRadioAccNoise3::fsmError(RadioAccNoise3State::States newState) {
 	stringstream errMsg;
 
-	errMsg << "Error! Radio FSM (current state is" << state.getState();
+	errMsg << "Error! Radio FSM (current state is" << detailedState.getState();
 	errMsg << ") was asked to switch to an unknown state:" << newState << ".";
 	error(errMsg.str().data());
 }

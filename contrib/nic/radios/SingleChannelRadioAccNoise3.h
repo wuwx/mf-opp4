@@ -27,7 +27,7 @@
 #define SINGLECHANNELRADIOACCNOISE3_H
 
 #include <omnetpp.h>
-#include <BasicModule.h>
+#include <SingleChannelRadioAccNoise3.h>
 #include <ModuleAccess.h>
 #include <ActiveChannel.h>
 #include <map>
@@ -93,7 +93,8 @@ public:
 
 protected:
     /** @brief hold radio state */
-   RadioAccNoise3State state;
+   RadioAccNoise3State detailedState;
+
     /** @brief channel radio category */
   int stateCat;
 
