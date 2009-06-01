@@ -82,19 +82,24 @@ Installation
 1. Unpack the archive (you have probably already done so)
    tar xzf mobility-fw<VERSION>.tgz
 
-2. run the mkmk shell script
-   ./mkmk
+2. Import the project in the OMNeT++ IDE:
+   After starting the OMNeT++ IDE, you can import the project by right-clicking
+   in the project list and choosing the "Import..." wizard, and 
+   "General->Existing project into Workspace".  Select the directory containing 
+   the branch as root directory. You should be able to build it by pressing CTRL-B. 
 
-3. make all 
+3. Select one of the networks in the "Project explorer" panel (e.g. ieee802154), 
+   right-click on its omnetpp.ini file and choose "Run as..." 
+   "Omnet++ simulation" to create and execute a run configuration.
 
-
-Importing the project into the OMNeT++ 4 IDE
-============================================
-After starting the OMNeT++ IDE, you can import the project by right-clicking
-in the project list and choosing the "Import..." wizard, and 
-"General->Existing project into Workspace".  Select the directory containing 
-the branch as root directory. You should be able to build it by pressing CTRL-B. 
-
+4. Two windows should show up. The first shows a graphical representation 
+   of a small network. Use the zoom buttons in the tool bar and decrease
+   the icon size using Ctrl-O to improve the visibility.
+   The other window shows the initialization messages from all modules part of
+   the simulation. The simulation time is set at 0. 
+   Clicking on "Step" will let Omnet++ handle the first event waiting in the
+   events queue. "Run" makes Omnet++ processes all events until the simulation
+   ends.
 
 Getting started
 ===============
