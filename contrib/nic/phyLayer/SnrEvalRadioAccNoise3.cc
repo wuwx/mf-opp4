@@ -608,11 +608,11 @@ double SnrEvalRadioAccNoise3::calcPathloss(AirFrameRadioAccNoise3 * frame) {
 
 	double distance = sqrt(sqrdistance);
 
-	if(strcmp(channelModel, "freespace")) {
+	if(strcmp(channelModel, "freespace") == 0) {
 		pathLossCoeff = calcFreeSpacePathloss(distance);
-	} else if (strcmp(channelModel, "lognormal")) {
+	} else if (strcmp(channelModel, "lognormal") == 0) {
 		pathLossCoeff = calcLogNormaShadowingPathloss(distance);
-	} else if (strcmp(channelModel, "lognormal")) {
+	} else if (strcmp(channelModel, "lognormal") == 0) {
 		pathLossCoeff = calcRayleighPathloss(distance);
 	}
 

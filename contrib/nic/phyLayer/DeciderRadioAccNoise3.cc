@@ -174,7 +174,7 @@ double DeciderRadioAccNoise3::getBERFromSNR(double snr) {
 		ber = 0.5 * exp(-0.5 * snr);
 	}
 
-	return ber;
+	return std::max(ber, BER_LOWER_BOUND);
 }
 
 cMessage *DeciderRadioAccNoise3::decapsMsg(AirFrameRadioAccNoise3 * frame)
