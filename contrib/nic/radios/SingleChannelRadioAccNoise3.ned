@@ -29,7 +29,7 @@ simple SingleChannelRadioAccNoise3
         bool debug = default(false); // debug switch
 		bool useSimTracer = default(false);
         double bitrate @unit(bps); // radio bit rate (in bits per second)
-        bool compatibiltyMode = default(false); // if active, the radio will be in reception at initialization time. This allows to run MAC protocols depending on this behavior inherited from the original radio model.
+        bool compatibilityMode = default(false); // if active, the radio will be in reception at initialization time. This allows to run MAC protocols depending on this behavior inherited from the original radio model.
         
         // (1) time parameters (in seconds)
         // (how long does it take to go from one state to another).
