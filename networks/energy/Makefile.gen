@@ -1,0 +1,21 @@
+# Makefile for own simulations on linux or MAC OS with shared libraries
+
+all:
+	opp_makemake -f -I../../core/basicModules \
+					-I../../core/basicMessages \
+					-I../../core/blackboard \
+					-I../../core/channelControl \
+					-I../../core/utils \
+					-I../../contrib/applLayer \
+					-I../../contrib/battery \
+					-I../../contrib/netwLayer \
+					-I../../contrib/messages \
+					-I../../contrib/nic/macLayer \
+					-I../../contrib/nic/phyLayer \
+					-I../../contrib/nic/radios \
+					-I../../contrib/utils \
+					-L../../out/'$$(CONFIGNAME)'/contrib \
+					-L../../out/'$$(CONFIGNAME)'/core \
+					-lmfcore -lmfcontrib -o energy
+
+# DO NOT DELETE THIS LINE -- make depend depends on it.
