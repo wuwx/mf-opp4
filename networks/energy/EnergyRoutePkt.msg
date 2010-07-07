@@ -26,5 +26,5 @@ class WiseRoutePkt;
 
 message EnergyRoutePkt extends WiseRoutePkt
 {
-
+	double batteryState;
 }

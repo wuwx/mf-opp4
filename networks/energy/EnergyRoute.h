@@ -28,6 +28,9 @@ class EnergyRoute : public WiseRoute
   public:
 	virtual void initialize(int);
     virtual void handleMessage(cMessage *msg);
+    virtual void handleLowerMsg(cMessage* msg);
+    virtual void updateRouteTable(int origin, int lastHop, double rssi, double ber);
+
 };
 
 #endif

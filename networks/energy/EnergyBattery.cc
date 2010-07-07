@@ -107,7 +107,7 @@ void EnergyBattery::receiveBBItem(int category, const BBItem *details, int scope
 		}
 
 		EV << "NIC ID: " << getParentModule()->getSubmodule("nic")->getId() << " BB ID: " << scopeModuleId << endl;
-		updateBatteryState(newRadioState);
+		updateBatteryState(radioState);
 
 		radioState = newRadioState;
 
